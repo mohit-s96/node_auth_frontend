@@ -1,0 +1,3 @@
+mutation Register($age: Float!, $email: String!, $password: String!) {
+  register(age: $age, email: $email, password: $password)
+}

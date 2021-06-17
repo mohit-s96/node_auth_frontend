@@ -2,4 +2,29 @@
   margin: 0;
   padding: 0;
   box-sizing: border-box;
+  font-family: Arial, Helvetica, sans-serif;
+}
+.nav {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 8px;
+  height: 100px;
+}
+.flex {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 8px;
+  height: 300px;
+}
+.flexy {
+  flex-direction: column;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 8px;
+}
+.nav a {
+  margin: 12px;
 }
