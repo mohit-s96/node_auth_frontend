@@ -1,26 +1,30 @@
-import React from "react";
-import "./App.css";
-import { BrowserRouter, Switch, Route, Link } from "react-router-dom";
-import Home from "./pages/Home";
-import Register from "./pages/Register";
-import Login from "./pages/Login";
+import React, { ReactElement } from "react";
+import { useEffect } from "react";
+import { useState } from "react";
+import Routes from "./Routes";
+import { setAccessToken } from "./tokenGen";
 
-function App() {
+function App(): ReactElement {
+  const [loading, setLoading] = useState(true);
+  useEffect(() => {
+    fetch("http://localhost:4000/rfrt", {
+      method: "POST",
+      credentials: "include",
+    }).then(async (res) => {
+      const data = await res.json();
+      if (data) {
+        setAccessToken(data.accessToken);
+        setLoading(false);
+      }
+    });
+  }, []);
+  if (loading) {
+    return <div className="flexy">Loading</div>;
+  }
   return (
-    <BrowserRouter>
-      <div className="nav">
-        <Link to="/register">Register</Link>
-        <Link to="/login">Login</Link>
-        <Link to="/">Home</Link>
-      </div>
-      <Switch>
-        <Route exact path="/">
-          <Home />
-        </Route>
-        <Route exact path="/register" component={Register} />
-        <Route exact path="/login" component={Login} />
-      </Switch>
-    </BrowserRouter>
+    <div>
+      <Routes />
+    </div>
   );
 }
 

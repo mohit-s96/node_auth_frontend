@@ -2,6 +2,7 @@ import React, { ReactElement } from "react";
 import { useState } from "react";
 import { RouteComponentProps } from "react-router-dom";
 import { useLoginMutation } from "../generated/graphql";
+import { setAccessToken } from "../tokenGen";
 
 function Login({ history }: RouteComponentProps): ReactElement {
   const [pass, setPass] = useState("");
@@ -43,6 +44,7 @@ function Login({ history }: RouteComponentProps): ReactElement {
                   "jwt",
                   data.data?.login.accessToken as string
                 );
+                setAccessToken(data.data?.login.accessToken as string);
                 history.push("/");
               }
               setEmail("");

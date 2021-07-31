@@ -81,6 +81,14 @@ export type UsersQuery = (
   )> }
 );
 
+export type AuthQueryVariables = Exact<{ [key: string]: never; }>;
+
+
+export type AuthQuery = (
+  { __typename?: 'Query' }
+  & Pick<Query, 'authRoute'>
+);
+
 export type HelloQueryVariables = Exact<{ [key: string]: never; }>;
 
 
@@ -171,6 +179,57 @@ export function useUsersLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<User
 export type UsersQueryHookResult = ReturnType<typeof useUsersQuery>;
 export type UsersLazyQueryHookResult = ReturnType<typeof useUsersLazyQuery>;
 export type UsersQueryResult = Apollo.QueryResult<UsersQuery, UsersQueryVariables>;
+export const AuthDocument = gql`
+    query Auth {
+  authRoute
+}
+    `;
+export type AuthComponentProps = Omit<ApolloReactComponents.QueryComponentOptions<AuthQuery, AuthQueryVariables>, 'query'>;
+
+    export const AuthComponent = (props: AuthComponentProps) => (
+      <ApolloReactComponents.Query<AuthQuery, AuthQueryVariables> query={AuthDocument} {...props} />
+    );
+    
+export type AuthProps<TChildProps = {}, TDataName extends string = 'data'> = {
+      [key in TDataName]: ApolloReactHoc.DataValue<AuthQuery, AuthQueryVariables>
+    } & TChildProps;
+export function withAuth<TProps, TChildProps = {}, TDataName extends string = 'data'>(operationOptions?: ApolloReactHoc.OperationOption<
+  TProps,
+  AuthQuery,
+  AuthQueryVariables,
+  AuthProps<TChildProps, TDataName>>) {
+    return ApolloReactHoc.withQuery<TProps, AuthQuery, AuthQueryVariables, AuthProps<TChildProps, TDataName>>(AuthDocument, {
+      alias: 'auth',
+      ...operationOptions
+    });
+};
+
+/**
+ * __useAuthQuery__
+ *
+ * To run a query within a React component, call `useAuthQuery` and pass it any options that fit your needs.
+ * When your component renders, `useAuthQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useAuthQuery({
+ *   variables: {
+ *   },
+ * });
+ */
+export function useAuthQuery(baseOptions?: Apollo.QueryHookOptions<AuthQuery, AuthQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<AuthQuery, AuthQueryVariables>(AuthDocument, options);
+      }
+export function useAuthLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<AuthQuery, AuthQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<AuthQuery, AuthQueryVariables>(AuthDocument, options);
+        }
+export type AuthQueryHookResult = ReturnType<typeof useAuthQuery>;
+export type AuthLazyQueryHookResult = ReturnType<typeof useAuthLazyQuery>;
+export type AuthQueryResult = Apollo.QueryResult<AuthQuery, AuthQueryVariables>;
 export const HelloDocument = gql`
     query Hello {
   hello
